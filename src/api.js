@@ -1,169 +1,6 @@
-/*!
- * antbridge.js v1.1.4-rc
- * (c) 2017-2017 huihui
- * Released under the MIT License.
- */
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.ant = factory());
-}(this, (function () { 'use strict';
-
-var ant$1 = Object.create({});
-
-/**
- * @name ua
- * @description 同集团统一UA规范
- * @memberOf Ali
- * @readonly
- * @type {string}
- */
-var ua = navigator.userAgent;
-
-// antBridge版本号
-var version = '1.1.4-rc';
-
-/**
- * @name isAlipay
- * @description 是否在支付宝钱包内运行
- * @memberOf Ali
- * @readonly
- * @type {string}
- */
-var isAlipay = ua.indexOf('AlipayClient') > -1 || ua.indexOf('AliApp(AP') > -1;
-
-/**
- * @name isNebula
- * @description 是否在 Nebula 容器内运行
- * @memberOf Ali
- * @readonly
- * @type {string}
- */
-var isNebula = ua.indexOf('Nebula') > -1;
-
-/**
- * @name alipayVersion
- * @description 支付宝钱包版本号
- * @memberOf Ali
- * @readonly
- * @type {string}
- */
-var alipayVersion = (function () {
-  if (isAlipay) {
-    var version = ua.match(/AlipayClient\/(.*)/);
-    return (version && version.length) ? version[1] : ''
-  }
-  return ''
-})();
-
-/**
- * @name appinfo
- * @description 同集团统一的应用信息标识，用于判断应用及版本
- * @property {string} engine 应用所使用的 Hybrid 容器名
- * @property {string} engineVer 应用所使用的 Hybrid 容器版本号
- * @property {string} name 应用名
- * @property {string} ver 应用版本号
- * @memberOf Ali
- * @readonly
- * @type {Object}
- */
-var appinfo = {
-  engine: 'alipay',
-  engineVer: alipayVersion,
-  name: 'alipay',
-  ver: alipayVersion
-};
-
-var isAndroid = /android/i.test(ua);
-
-var isIOS = /iphone|ipad/i.test(ua);
-
-// return 1代表目标比当前版本小，-1相反，相同为0
-function compareVersion (targetVersion) {
-  targetVersion = targetVersion.split('.');
-  var alipayVersion = alipayVersion.split('.');
-
-  for (var i = 0, n1, n2; i < alipayVersion.length; i++) {
-    n1 = parseInt(targetVersion[i], 10) || 0;
-    n2 = parseInt(alipayVersion[i], 10) || 0;
-
-    if (n1 > n2) { return -1 }
-    if (n1 < n2) { return 1 }
-  }
-
-  return 0
-}
-
-
-var detect = Object.freeze({
-	ua: ua,
-	version: version,
-	isAlipay: isAlipay,
-	isNebula: isNebula,
-	alipayVersion: alipayVersion,
-	appinfo: appinfo,
-	isAndroid: isAndroid,
-	isIOS: isIOS,
-	compareVersion: compareVersion
-});
-
-var toString = Object.prototype.toString;
-
-// some isType methods: isFunction, isString, isNumber
-
-
-function isString (obj) {
-  return toString.call(obj) === '[object String]'
-}
-
-function isNumber (obj) {
-  return toString.call(obj) === '[object Number]'
-}
-
-/* @Promise the core unit */
-/**
- * 解决调用时序，优化任务队列
- * 统一使用异步调用的方式
- */
-var readyPromise = new Promise(function (resolve) {
-  if (window.AlipayJSBridge && window.AlipayJSBridge.call) {
-    resolve();
-  } else {
-    document.addEventListener('AlipayJSBridgeReady', resolve);
-  }
-});
-
-function ready () {
-  return readyPromise
-}
-
-/**
- * 通用接口，调用方式等同AlipayJSBridge.call;
- * 无需考虑接口的执行上下文，必定调用成功
- */
-function call () {
-  var args = Array.from(arguments);
-
-  var name = args[0];
-  var opt = args[1] || {};
-
-  if (!isString(name)) {
-    console.error('apiName error：', name);
-    return
-  }
-
-  return readyPromise.then(function () { return new Promise(function (resolve, reject) {
-    window.AlipayJSBridge.call(name, opt, function (result) {
-      !result.error ? resolve(result) : reject(result);
-    });
-  }); })
-}
-
-
-var core = Object.freeze({
-	ready: ready,
-	call: call
-});
+import { ready, call } from './core'
+import { isString, isNumber } from './util'
+import { isAndroid } from './detect'
 
 /**
  * 开新窗口
@@ -178,16 +15,16 @@ var core = Object.freeze({
  *     alert("end pushWindow");
  * });
  */
-function pushWindow (opt, fn) {
+export function pushWindow (opt, fn) {
   if (isString(opt)) {
     opt = {
       url: opt
-    };
+    }
   }
 
-  opt = opt || {};
+  opt = opt || {}
   if (!opt.url) {
-    console.error('Ali.pushWindow: url is required！');
+    console.error('Ali.pushWindow: url is required！')
     return false
   }
 
@@ -204,7 +41,7 @@ function pushWindow (opt, fn) {
  *     alert("end popWindow");
  * });
  */
-function popWindow (opt, fn) {
+export function popWindow (opt, fn) {
   return call('popWindow', opt)
 }
 
@@ -224,21 +61,21 @@ function popWindow (opt, fn) {
  *     alert("end popTo");
  * });
  */
-function popTo (opt, fn) {
+export function popTo (opt, fn) {
   if (isNumber(opt)) {
     opt = {
       step: opt
-    };
+    }
   } else if (isString(opt)) {
     opt = {
       urlPattern: opt
-    };
+    }
   }
-  opt.step !== undefined && (opt.index = opt.step);
+  opt.step !== undefined && (opt.index = opt.step)
   return call('popTo', opt)
 }
 
-var calendar = {
+export const calendar = {
   /**
    * 添加日历事件
    * 备注：frequency 和 recurrenceTimes 若有值，则都必须有值
@@ -273,7 +110,7 @@ var calendar = {
   add: function (opt) {
     return call('addEventCal', opt)
   }
-};
+}
 
 /**
  * 拍照/选择照片
@@ -307,8 +144,8 @@ var calendar = {
  *     alert("end photo");
  * });
  */
-function photo (opt) {
-  opt = opt || {};
+export function photo (opt) {
+  opt = opt || {}
 
   var def = {
     format: 'jpg',
@@ -320,33 +157,33 @@ function photo (opt) {
     maskImg: undefined,
     maskWidth: undefined,
     maskHeight: undefined
-  };
-
-  Object.assign(def, opt);
-
-  def.imageFormat = def.format;
-
-  if (def.dataType === 'remoteurl') {
-    def.dataType = 'dataurl';
   }
 
-  def.dataType = def.dataType.slice(0, -3) + def.dataType.slice(-3).toUpperCase();
+  Object.assign(def, opt)
 
-  return call('photo', def).then(function (result) {
+  def.imageFormat = def.format
+
+  if (def.dataType === 'remoteurl') {
+    def.dataType = 'dataurl'
+  }
+
+  def.dataType = def.dataType.slice(0, -3) + def.dataType.slice(-3).toUpperCase()
+
+  return call('photo', def).then(result => {
     if (result.dataURL) {
-      result.dataURL = 'data:image/' + def.imageFormat + ';base64,' + result.dataURL;
+      result.dataURL = 'data:image/' + def.imageFormat + ';base64,' + result.dataURL
     }
 
-    result.photo = result.dataURL || result.fileURL;
+    result.photo = result.dataURL || result.fileURL
 
     return result
-  }, function (result) {
-    result.errorMessage = result.error === 10 ? '用户取消' : result.errorMessage;
+  }, result => {
+    result.errorMessage = result.error === 10 ? '用户取消' : result.errorMessage
     return result
   })
 }
 
-var vibration = {
+export const vibration = {
   /**
    * 调用震动
    * @alias vibration.vibrate
@@ -366,13 +203,13 @@ var vibration = {
     if (isNumber(opt)) {
       opt = {
         duration: opt
-      };
+      }
     }
     return call('vibrate', opt)
   }
-};
+}
 
-var shake = {
+export const shake = {
   /**
    * 摇一摇
    * @alias shake.watch
@@ -395,9 +232,9 @@ var shake = {
   watch: function (opt) {
     return call('watchShake', opt)
   }
-};
+}
 
-var geolocation = {
+export const geolocation = {
   /**
    * 获取位置信息
    * @alias geolocation.getCurrentPosition
@@ -456,7 +293,7 @@ var geolocation = {
   //        }
   //    })
   //  }
-};
+}
 
 /**
  * 调用native的分享接口，H5情况下请自行调用mui的分享组件
@@ -498,7 +335,7 @@ var geolocation = {
  *     }
  * });
  */
-function share (opt) {
+export function share (opt) {
   var shareTypes = {
     1: 'Weixin',
     2: 'Weibo',
@@ -507,43 +344,43 @@ function share (opt) {
     16: 'LaiwangTimeline',
     32: 'WeixinTimeLine',
     64: 'CopyLink'
-  };
-  opt = opt || {};
-  var data = opt;
+  }
+  opt = opt || {}
+  var data = opt
   // 如果有 channels 参数就认为是原始的参数格式，否则认为是统一的参数格式
   if (!opt.channels || opt.channels.length === 0) {
-    opt.title = opt.title || '';
-    opt.content = opt.text;
-    opt.imageUrl = opt.image;
-    opt.captureScreen = !!opt.captureScreen;
-    opt.url = opt.url || '';
+    opt.title = opt.title || ''
+    opt.content = opt.text
+    opt.imageUrl = opt.image
+    opt.captureScreen = !!opt.captureScreen
+    opt.url = opt.url || ''
 
     data = {
       channels: []
-    };
+    }
     if (typeof opt.shareType === 'undefined') {
-      opt.shareType = -1;
+      opt.shareType = -1
     }
     for (var i in shareTypes) {
       if (Number(i) & opt.shareType) {
         data.channels.push({
           name: shareTypes[i],
           param: opt
-        });
+        })
       }
     }
   } else if (isAndroid) {
     // hack android QZoneChannel to QQZoneChannel
-    opt.channels.forEach(function (channel) {
+    opt.channels.forEach(channel => {
       if (channel.name.toLowerCase() === 'qzone') {
-        channel.name = 'QQZone';
+        channel.name = 'QQZone'
       }
-    });
+    })
   }
   return call('share', data)
 }
 
-var contacts = {
+export const contacts = {
   /**
    * 调用本地通讯录
    * @alias contacts.get
@@ -565,36 +402,36 @@ var contacts = {
    * });
    */
   get: function (opt, fn) {
-    opt = opt || {};
-    opt.multiple && console.error('仅支持单选');
+    opt = opt || {}
+    opt.multiple && console.error('仅支持单选')
 
-    return call('contact', opt).then(function (result) {
-      result.results = [];
+    return call('contact', opt).then(result => {
+      result.results = []
 
       result.results[0] = {
         phoneNumber: result.mobile,
         email: undefined,
         name: result.name
-      };
+      }
 
       return result
-    }, function (result) {
+    }, result => {
       switch (result.errorCode) {
         case 10:
-          result.errorMessage = '没有权限';
+          result.errorMessage = '没有权限'
           break
 
         case 11:
-          result.errorMessage = '用户取消操作';
+          result.errorMessage = '用户取消操作'
           break
       }
 
       return result
     })
   }
-};
+}
 
-var network = {
+export const network = {
   /**
    * 获取网络状态
    * @alias network.getType
@@ -658,7 +495,7 @@ var network = {
   //          }
   //      });
   //  };
-};
+}
 
 /**
  * 唤起钱包登录功能；
@@ -672,7 +509,7 @@ var network = {
  *     alert("end login");
  * });
  */
-function login () {
+export function login () {
   return call('login')
 }
 
@@ -697,7 +534,7 @@ function login () {
  *     alert("end tradePay");
  * });
  */
-function tradePay (opt, fn) {
+export function tradePay (opt, fn) {
   return call('tradePay', opt)
 }
 
@@ -718,13 +555,13 @@ function tradePay (opt, fn) {
  * @param {function} fn 回调函数
  * @memberOf Ali
  */
-function h5TradePay (opt) {
-  console.error('alpayClient don\'t support Ali.h5TradePay，please use Ali.tradePay');
+export function h5TradePay (opt) {
+  console.error('alpayClient don\'t support Ali.h5TradePay，please use Ali.tradePay')
 
-  return ready().then(function () { return ({
+  return ready().then(() => ({
     errorCode: 1,
     errorMessage: '接口不存在'
-  }); })
+  }))
 }
 
 // ------------------
@@ -752,29 +589,29 @@ function h5TradePay (opt) {
 // ------------------
 // 仅供支付宝钱包使用
 
-function alert (opt) {
+export function alert (opt) {
   if (isString(opt) || isNumber(opt)) {
     opt = {
       message: opt + ''
-    };
+    }
   }
   return call('alert', opt)
 }
 
-function confirm (opt) {
+export function confirm (opt) {
   if (isString(opt) || isNumber(opt)) {
     opt = {
       message: opt + ''
-    };
+    }
   }
   return call('confirm', opt)
 }
 
-function actionSheet (opt, fn) {
+export function actionSheet (opt, fn) {
   // Android上整个标题栏都不显示，界面不好看
   if (isAndroid) {
     if (typeof opt.title === 'undefined' || opt.title === '') {
-      opt.title = ' ';
+      opt.title = ' '
     }
   }
   return call('actionSheet', opt)
@@ -799,16 +636,16 @@ function actionSheet (opt, fn) {
  *   alert("end toast");
  * });
  */
-function toast (opt) {
+export function toast (opt) {
   if (isString(opt) || isNumber(opt)) {
     opt = {
       text: opt + ''
-    };
+    }
   }
 
-  opt = opt || {};
-  opt.content = opt.text;
-  opt.duration = opt.duration || 2000;
+  opt = opt || {}
+  opt.content = opt.text
+  opt.duration = opt.duration || 2000
 
   // todo android hack，为了解决android不是在消失后才回调的问题。
   return call('toast', opt)
@@ -830,23 +667,23 @@ function toast (opt) {
  *     alert("end setTitle");
  * });
  */
-function setTitle (opt) {
+export function setTitle (opt) {
   var def = {
     type: 'title'
-  };
+  }
 
   if (isString(opt)) {
     opt = {
       title: opt
-    };
+    }
   }
 
-  opt.title = opt.title || opt.text;
+  opt.title = opt.title || opt.text
 
-  Object.assign(def, opt);
+  Object.assign(def, opt)
 
   if (def.title === null) {
-    console.error('setTitle: title is required！');
+    console.error('setTitle: title is required！')
     return false
   }
 
@@ -862,7 +699,7 @@ function setTitle (opt) {
  *     alert("end showTitle");
  * });
  */
-function showTitle () {
+export function showTitle () {
   return call('showTitlebar')
 }
 
@@ -875,7 +712,7 @@ function showTitle () {
  *     alert("end hideTitle");
  * });
  */
-function hideTitle () {
+export function hideTitle () {
   return call('hideTitlebar')
 }
 
@@ -934,44 +771,3 @@ function hideTitle () {
 //   }
 //   return call('hideLoading', fn);
 // }
-
-
-var api = Object.freeze({
-	pushWindow: pushWindow,
-	popWindow: popWindow,
-	popTo: popTo,
-	calendar: calendar,
-	photo: photo,
-	vibration: vibration,
-	shake: shake,
-	geolocation: geolocation,
-	share: share,
-	contacts: contacts,
-	network: network,
-	login: login,
-	tradePay: tradePay,
-	h5TradePay: h5TradePay,
-	alert: alert,
-	confirm: confirm,
-	actionSheet: actionSheet,
-	toast: toast,
-	setTitle: setTitle,
-	showTitle: showTitle,
-	hideTitle: hideTitle
-});
-
-Object.assign(ant$1, detect);
-Object.assign(ant$1, core);
-Object.assign(ant$1, api);
-
-['startApp', 'showOptionMenu', 'hideOptionMenu', 'showToolbar', 'hideToolbar', 'closeWebview', 'sendSMS', 'scan', 'getSessionData', 'setSessionData', 'checkJSAPI', 'checkApp', 'isInstalledApp', 'deposit', 'chooseContact', 'alipayContact', 'getConfig', 'getCities', 'rsa', 'getWifiList', 'connectWifi', 'notifyWifiShared', 'thirdPartyAuth', 'getThirdPartyAuthcode', 'setToolbarMenu', 'exitApp', 'hideBackButton', 'startApp', 'startPackage', 'getSharedData', 'setSharedData', 'removeSharedData', 'setClipboard', 'startDownload', 'stopDownload', 'getDownloadInfo', 'detectBeacons', 'startBeaconsBeep', 'stopBeaconsBeep', 'startIndoorLocation', 'stopIndoorLocation', 'addEventCal', 'startSpeech', 'stopSpeech', 'cancelSpeech', 'getWifiInfo', 'clearAllCookie', 'getMtopToken', 'getClientInfo', 'sinasso', 'getClipboard', 'checkBLEAvalability', 'scanBeacons', 'isSpeechAvailable', 'speechRecognizer', 'contactSync', 'setGestureBack', 'remoteLog', 'httpRequest', 'rpc', 'ping', 'snapshot', 'imageViewer', 'upload', 'networkAnalysis', 'showTitleLoading', 'hideTitleLoading', 'getLocation'].forEach(function (methodName) {
-  ant$1[methodName] = function () {
-    var args = Array.from(arguments);
-
-    ant$1.call.apply(null, [methodName].concat(args));
-  };
-});
-
-return ant$1;
-
-})));

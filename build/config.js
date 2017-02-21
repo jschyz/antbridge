@@ -49,7 +49,7 @@ function genConfig (opts) {
       replace({
         __VERSION__: version
       }),
-      // flow(),
+      flow(),
       buble(),
       alias(Object.assign({}, require('./alias'), opts.alias))
     ].concat(opts.plugins || [])

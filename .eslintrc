@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "extends": "standard",
+  "plugins": ["flowtype"],
+  "rules": {
+    "no-sequences": 0,
+    "no-useless-escape": 0,
+    "no-unexpected-multiline": 0,
+    "flowtype/define-flow-type": 1,
+    "flowtype/use-flow-type": 1
+  }
+}
