@@ -717,45 +717,25 @@ export function hideTitle () {
  *     alert("end showLoading");
  * });
  */
-// export function showLoading (opt, fn) {
-//   if (isStr(opt) || isNumber(opt)) {
-//     opt = {
-//       text: opt + ""
-//     };
-//   }
-//   opt = opt || {};
-//   // 修复opt.delay传入0时会使用默认值1000的bug
-//   var delay = isNumber(opt.delay) ? opt.delay : 1000;
-//   delete opt.delay;
-//   // 修复ios delay导致的hideLoading不一定能成功阻止被delay的showLoading的bug
-//   if (delay > 0 && isIOS()) {
-//     var st = setTimeout(function() {
-//       Ali.call('showLoading', opt, fn);
-//     }, delay);
-//     Ali._stLoadingQueue = Ali._stLoadingQueue || [];
-//     Ali._stLoadingQueue.push(st);
-//     return st;
-//   }
-//   Ali.call("showLoading", opt, fn);
-// }
+export function showLoading (opt) {
+  if (isString(opt) || isNumber(opt)) {
+    opt = {
+      text: opt + ''
+    }
+  }
+  opt = opt || {}
+  return call('showLoading', opt)
+}
 
 /**
-* 隐藏loading
-* @param {function} fn 回调函数
-* @memberOf Ali
-* @example
-* Ali.hideLoading().then(function() {
-*     alert("end hideLoading");
-* });
-*/
-// Ali.hideLoading = function(fn) {
-//   if ('array' === type(Ali._stLoadingQueue)) {
-//     if (Ali._stLoadingQueue.length) {
-//       antLog('clearLoadingCount: ' + Ali._stLoadingQueue.length);
-//       while (Ali._stLoadingQueue.length) {
-//         clearTimeout(Ali._stLoadingQueue.shift());
-//       }
-//     }
-//   }
-//   return call('hideLoading', fn);
-// }
+ * 隐藏loading
+ * @param {function} fn 回调函数
+ * @memberOf Ali
+ * @example
+ * Ali.hideLoading().then(function() {
+ *     alert("end hideLoading");
+ * });
+ */
+export function hideLoading (fn) {
+  return call('hideLoading')
+}

@@ -38,3 +38,31 @@ export function call () {
     })
   }))
 }
+
+export var _events = {}
+/**
+ * 绑定全局事件
+ * @param {string} event 事件名称，多个事件可用空格分隔开
+ * @param {function} fn 回调函数
+ * @memberOf Ali
+ */
+export function on (event, fn) {
+  event.split(/\s+/g).forEach(eventName => {
+    _events[eventName] || (_events[eventName] = [])
+    _events[eventName].push(fn)
+    document.addEventListener(eventName, fn, false)
+  })
+}
+
+/**
+ * 移除事件监听
+ * @method off
+ * @param  {String}   evt    事件类型
+ * @param  {Function} fn     事件回调
+ */
+export function off (evt) {
+  _events[evt] || (_events[evt] = [])
+  _events[evt].forEach(fn => {
+    document.removeEventListener(evt, fn, false)
+  })
+}

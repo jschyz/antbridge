@@ -159,10 +159,41 @@ function call () {
   }); })
 }
 
+var _events = {};
+/**
+ * 绑定全局事件
+ * @param {string} event 事件名称，多个事件可用空格分隔开
+ * @param {function} fn 回调函数
+ * @memberOf Ali
+ */
+function on (event, fn) {
+  event.split(/\s+/g).forEach(function (eventName) {
+    _events[eventName] || (_events[eventName] = []);
+    _events[eventName].push(fn);
+    document.addEventListener(eventName, fn, false);
+  });
+}
+
+/**
+ * 移除事件监听
+ * @method off
+ * @param  {String}   evt    事件类型
+ * @param  {Function} fn     事件回调
+ */
+function off (evt) {
+  _events[evt] || (_events[evt] = []);
+  _events[evt].forEach(function (fn) {
+    document.removeEventListener(evt, fn, false);
+  });
+}
+
 
 var core = Object.freeze({
 	ready: ready,
-	call: call
+	call: call,
+	_events: _events,
+	on: on,
+	off: off
 });
 
 /**
@@ -880,48 +911,28 @@ function hideTitle () {
  *     alert("end showLoading");
  * });
  */
-// export function showLoading (opt, fn) {
-//   if (isStr(opt) || isNumber(opt)) {
-//     opt = {
-//       text: opt + ""
-//     };
-//   }
-//   opt = opt || {};
-//   // 修复opt.delay传入0时会使用默认值1000的bug
-//   var delay = isNumber(opt.delay) ? opt.delay : 1000;
-//   delete opt.delay;
-//   // 修复ios delay导致的hideLoading不一定能成功阻止被delay的showLoading的bug
-//   if (delay > 0 && isIOS()) {
-//     var st = setTimeout(function() {
-//       Ali.call('showLoading', opt, fn);
-//     }, delay);
-//     Ali._stLoadingQueue = Ali._stLoadingQueue || [];
-//     Ali._stLoadingQueue.push(st);
-//     return st;
-//   }
-//   Ali.call("showLoading", opt, fn);
-// }
+function showLoading (opt) {
+  if (isString(opt) || isNumber(opt)) {
+    opt = {
+      text: opt + ''
+    };
+  }
+  opt = opt || {};
+  return call('showLoading', opt)
+}
 
 /**
-* 隐藏loading
-* @param {function} fn 回调函数
-* @memberOf Ali
-* @example
-* Ali.hideLoading().then(function() {
-*     alert("end hideLoading");
-* });
-*/
-// Ali.hideLoading = function(fn) {
-//   if ('array' === type(Ali._stLoadingQueue)) {
-//     if (Ali._stLoadingQueue.length) {
-//       antLog('clearLoadingCount: ' + Ali._stLoadingQueue.length);
-//       while (Ali._stLoadingQueue.length) {
-//         clearTimeout(Ali._stLoadingQueue.shift());
-//       }
-//     }
-//   }
-//   return call('hideLoading', fn);
-// }
+ * 隐藏loading
+ * @param {function} fn 回调函数
+ * @memberOf Ali
+ * @example
+ * Ali.hideLoading().then(function() {
+ *     alert("end hideLoading");
+ * });
+ */
+function hideLoading (fn) {
+  return call('hideLoading')
+}
 
 
 var api = Object.freeze({
@@ -946,7 +957,9 @@ var api = Object.freeze({
 	toast: toast,
 	setTitle: setTitle,
 	showTitle: showTitle,
-	hideTitle: hideTitle
+	hideTitle: hideTitle,
+	showLoading: showLoading,
+	hideLoading: hideLoading
 });
 
 Object.assign(ant$1, detect);
