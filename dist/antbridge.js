@@ -418,44 +418,34 @@ var geolocation = {
    *     alert(JSON.stringify(result));
    * });
    */
-  //  getCurrentPosition: function (opt) {
-  //    if (fn === undefined && isFn(opt)) {
-  //      fn = opt
-  //      opt = null
-  //    }
-  //    opt = opt || {
-  //      timeout: 15000
-  //    }
-   //
-  //    var timer = setTimeout(function() {
-  //      timer = null;
-  //      console.error("geolocation.getCurrentPosition: timeout");
-   //
-  //      var result = {
-  //        errorCode: 5,
-  //        errorMessage: "调用超时"
-  //      };
-   //
-  //      fn && fn(result);
-  //     }, opt.timeout);
-   //
-  //      Ali.call("getLocation", function(result) {
-  //        if (timer) {
-  //            clearTimeout(timer);
-   //
-  //            result.coords = {};
-  //            result.coords.latitude = +result.latitude;
-  //            result.coords.longitude = +result.longitude;
-   //
-  //            result.city = result.city ? result.city : result.province;
-  //            result.cityCode = result.citycode;
-   //
-  //            result.address = result.pois;
-   //
-  //            fn && fn(result);
-  //        }
-  //    })
-  //  }
+  getCurrentPosition: function (opt) {
+    opt = opt || {
+      timeout: 15000
+    };
+
+    return Promise.race([
+      call('getLocation').then(function (result) {
+        result.coords = {};
+        result.coords.latitude = +result.latitude;
+        result.coords.longitude = +result.longitude;
+
+        result.city = result.city ? result.city : result.province;
+        result.cityCode = result.citycode;
+        result.address = result.pois;
+
+        return result
+      }),
+      new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          console.error('geolocation.getCurrentPosition: timeout');
+          reject({
+            errorCode: 5,
+            errorMessage: '调用超时'
+          });
+        }, opt.timeout);
+      })
+    ])
+  }
 };
 
 /**
@@ -616,7 +606,7 @@ var network = {
    * @memberOf Ali
    * @todo 目前仅支持判断是否 wifi 连接以及是否联网
    * @example
-   * Ali.network.getType().then(function(result, networkAvailable) {
+   * Ali.network.getType().then(function(result) {
    *     alert(JSON.stringify(result));
    * });
    */
