@@ -196,7 +196,7 @@ function pushWindow (opt, fn) {
  * @param {function} fn 回调函数
  * @memberOf Ali
  * @example
- * Ali.popWindow(function() {
+ * Ali.popWindow().then(function() {
  *     alert("end popWindow");
  * });
  */
@@ -216,7 +216,7 @@ function popWindow (opt, fn) {
  * @example
  * Ali.popTo({
  *     step: -1
- * }, function() {
+ * }).then(function() {
  *     alert("end popTo");
  * });
  */
@@ -262,7 +262,7 @@ var calendar = {
    *      alarmOffset: 10,
    *      recurrenceTimes: 2,
    *      frequency: "day"
-   * }, function(result) {
+   * }).then(function(result) {
    *     alert(JSON.stringify(result));
    * });
    */
@@ -299,7 +299,7 @@ var calendar = {
  *     src: "camera",
  *     format: "jpg",
  *     quality: 100
- * }, function() {
+ * }).then(function() {
  *     alert("end photo");
  * });
  */
@@ -354,7 +354,7 @@ var vibration = {
    * @example
    * Ali.vibration.vibrate({
    *     duration: 3000
-   * }, function() {
+   * }).then(function() {
    *     alert("end vibrate");
    * });
    */
@@ -410,7 +410,7 @@ var geolocation = {
    * @param {string} fn.errorMessage 错误信息
    * @memberOf Ali
    * @example
-   * Ali.geolocation.getCurrentPosition(function(result) {
+   * Ali.geolocation.getCurrentPosition().then(function(result) {
    *     alert(JSON.stringify(result));
    * });
    */
@@ -488,7 +488,7 @@ var geolocation = {
  *     text: '～憨豆～哈哈哈哈～',
  *     image: 'http://mingxing.wubaiyi.com/uploads/allimg/c110818/1313A1952W0-15029.jpg',
  *     url: 'http://mingxing.wubaiyi.com/uploads/allimg/c110818/1313A1952W0-15029.jpg'
- * }, function (result) {
+ * }).then(function (result) {
  *     if (result.errorCode) {
  *         // 调用分享出错，这个时候可以调用mui的分享或者提示出错
  *     }
@@ -556,7 +556,7 @@ var contacts = {
    * @todo 暂时不支持 email
    * @todo 暂时不支持 multiple
    * @example
-   * Ali.contacts.get(function(result) {
+   * Ali.contacts.get().then(function(result) {
    *     alert(JSON.stringify(result));
    * });
    */
@@ -612,48 +612,37 @@ var network = {
    * @memberOf Ali
    * @todo 目前仅支持判断是否 wifi 连接以及是否联网
    * @example
-   * Ali.network.getType(function(result, networkAvailable) {
+   * Ali.network.getType().then(function(result, networkAvailable) {
    *     alert(JSON.stringify(result));
    * });
    */
-  //  getType = function(opt, fn) {
-  //      if (fn === undefined && isFn(opt)) {
-  //          fn = opt;
-  //          opt = null;
-  //      }
-  //      opt = opt || {
-  //          timeout: 15000
-  //      };
-   //
-  //      var timer = setTimeout(function() {
-  //          timer = null;
-  //          console.error("network.getType: timeout");
-   //
-  //          var result = {
-  //              errorCode: 5,
-  //              errorMessage: "调用超时"
-  //          };
-   //
-  //          fn && fn(result);
-  //      }, opt.timeout);
-   //
-  //      Ali.call("getNetworkType", function(result) {
-  //          if (timer) {
-  //              clearTimeout(timer);
-   //
-  //              result.networkAvailable = result.networkType !== "fail";
-   //
-  //              result.is3G = result.is2G = result.isE = result.isG = result.isH = false;
-   //
-  //              result.isWifi = result.networkType === "wifi";
-  //              result.isOnline = result.networkAvailable;
-   //
-  //              result.type = result.networkType;
-   //
-  //              fn && fn(result, result.networkAvailable);
-  //          }
-  //      });
-  //  };
+  getType: function (opt) {
+    opt = opt || {
+      timeout: 15000
+    };
+
+    // Promise 处理超时
+    return Promise.race([
+      call('getNetworkType').then(function (result) {
+        result.networkAvailable = result.networkType !== 'fail';
+        result.is3G = result.is2G = result.isE = result.isG = result.isH = false;
+        result.isWifi = result.networkType === 'wifi';
+        result.isOnline = result.networkAvailable;
+        result.type = result.networkType;
+
+        return result
+      }),
+      new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          console.error('network.getType: timeout');
+          reject({
+            errorCode: 5,
+            errorMessage: '调用超时'
+          });
+        }, opt.timeout);
+      })
+    ])
+  }
 };
 
 /**
@@ -664,7 +653,7 @@ var network = {
  * @param {string} fn.errorMessage 错误信息
  * @memberOf Ali
  * @example
- * Ali.login(function() {
+ * Ali.login().then(function() {
  *     alert("end login");
  * });
  */
@@ -689,7 +678,7 @@ function login () {
  * @example
  * Ali.tradePay({
  *     tradeNO: "201209071234123221"
- * }, function() {
+ * }).then(function() {
  *     alert("end tradePay");
  * });
  */
@@ -776,6 +765,15 @@ function actionSheet (opt, fn) {
   return call('actionSheet', opt)
 }
 
+function openInBrowser (opt, fn) {
+  if (isString(opt)) {
+    opt = {
+      url: opt
+    };
+  }
+  return call('openInBrowser', opt)
+}
+
 /**
  * 弱提示
  * @param {(string|object)} opt 调用参数，可为对象或字符串（为显示内容）
@@ -822,7 +820,7 @@ function toast (opt) {
  * Ali.setTitle({
  *     text: "title",
  *     type: "title"
- * }, function() {
+ * }).then(function() {
  *     alert("end setTitle");
  * });
  */
@@ -854,7 +852,7 @@ function setTitle (opt) {
  * @param {function} fn 回调函数
  * @memberOf Ali
  * @example
- * Ali.showTitle(function() {
+ * Ali.showTitle().then(function() {
  *     alert("end showTitle");
  * });
  */
@@ -867,7 +865,7 @@ function showTitle () {
  * @param  {function} fn 回调函数
  * @memberOf Ali
  * @example
- * Ali.hideTitle(function() {
+ * Ali.hideTitle().then(function() {
  *     alert("end hideTitle");
  * });
  */
@@ -884,7 +882,7 @@ function hideTitle () {
  * @example
  * Ali.showLoading({
  *     text: "loading"
- * }, function() {
+ * }).then(function() {
  *     alert("end showLoading");
  * });
  */
@@ -915,7 +913,7 @@ function hideTitle () {
 * @param {function} fn 回调函数
 * @memberOf Ali
 * @example
-* Ali.hideLoading(function() {
+* Ali.hideLoading().then(function() {
 *     alert("end hideLoading");
 * });
 */
@@ -950,6 +948,7 @@ var api = Object.freeze({
 	alert: alert,
 	confirm: confirm,
 	actionSheet: actionSheet,
+	openInBrowser: openInBrowser,
 	toast: toast,
 	setTitle: setTitle,
 	showTitle: showTitle,

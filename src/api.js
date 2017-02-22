@@ -457,44 +457,33 @@ export const network = {
    *     alert(JSON.stringify(result));
    * });
    */
-  //  getType = function(opt, fn) {
-  //      if (fn === undefined && isFn(opt)) {
-  //          fn = opt;
-  //          opt = null;
-  //      }
-  //      opt = opt || {
-  //          timeout: 15000
-  //      };
-   //
-  //      var timer = setTimeout(function() {
-  //          timer = null;
-  //          console.error("network.getType: timeout");
-   //
-  //          var result = {
-  //              errorCode: 5,
-  //              errorMessage: "调用超时"
-  //          };
-   //
-  //          fn && fn(result);
-  //      }, opt.timeout);
-   //
-  //      Ali.call("getNetworkType", function(result) {
-  //          if (timer) {
-  //              clearTimeout(timer);
-   //
-  //              result.networkAvailable = result.networkType !== "fail";
-   //
-  //              result.is3G = result.is2G = result.isE = result.isG = result.isH = false;
-   //
-  //              result.isWifi = result.networkType === "wifi";
-  //              result.isOnline = result.networkAvailable;
-   //
-  //              result.type = result.networkType;
-   //
-  //              fn && fn(result, result.networkAvailable);
-  //          }
-  //      });
-  //  };
+  getType: function (opt) {
+    opt = opt || {
+      timeout: 15000
+    }
+
+    // Promise 处理超时
+    return Promise.race([
+      call('getNetworkType').then(result => {
+        result.networkAvailable = result.networkType !== 'fail'
+        result.is3G = result.is2G = result.isE = result.isG = result.isH = false
+        result.isWifi = result.networkType === 'wifi'
+        result.isOnline = result.networkAvailable
+        result.type = result.networkType
+
+        return result
+      }),
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          console.error('network.getType: timeout')
+          reject({
+            errorCode: 5,
+            errorMessage: '调用超时'
+          })
+        }, opt.timeout)
+      })
+    ])
+  }
 }
 
 /**
@@ -618,7 +607,7 @@ export function actionSheet (opt, fn) {
 }
 
 export function openInBrowser (opt, fn) {
-  if (isStr(opt)) {
+  if (isString(opt)) {
     opt = {
       url: opt
     }
