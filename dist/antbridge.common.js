@@ -174,13 +174,14 @@ function on (event, fn) {
  * 移除事件监听
  * @method off
  * @param  {String}   evt    事件类型
- * @param  {Function} fn     事件回调
  */
 function off (evt) {
+  var fn;
   _events[evt] || (_events[evt] = []);
-  _events[evt].forEach(function (fn) {
+
+  while ((fn = _events[evt].shift()) !== undefined) {
     document.removeEventListener(evt, fn, false);
-  });
+  }
 }
 
 
