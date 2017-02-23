@@ -4,7 +4,7 @@
     "start": "http-server ./ -p 8081",
     "build": "node build/build.js",
     "lint": "eslint src build test",
-    "test": "karma start",
+    "test": "npm run lint && npm run test:cover",
     "test:unit": "karma start build/karma.unit.config.js",
     "test:cover": "karma start build/karma.cover.config.js"
   },

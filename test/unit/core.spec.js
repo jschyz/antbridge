@@ -35,7 +35,7 @@ describe('Core unit test', () => {
 
     beforeEach(() => {
       window.AlipayJSBridge = {
-        call(name, opt, fn) {
+        call (name, opt, fn) {
           fn(message)
         }
       }
@@ -56,7 +56,7 @@ describe('Core unit test', () => {
 
     beforeEach(() => {
       window.AlipayJSBridge = {
-        call(name, opt, fn) {
+        call (name, opt, fn) {
           fn(message)
         }
       }
@@ -73,7 +73,7 @@ describe('Core unit test', () => {
   describe('The event binding: on & off', () => {
     it('should be  mock the built-in parameters', () => {
       on('titleClick', () => {
-        alert('title clicked')
+        console.log('title clicked')
       })
     })
 
