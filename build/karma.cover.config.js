@@ -1,4 +1,4 @@
-var base = require('./karma.base.config.js')
+var base = require('./karma.base.config')
 
 module.exports = function(config) {
   var options = Object.assign(base, {
@@ -10,12 +10,11 @@ module.exports = function(config) {
         { type: 'text-summary', subdir: '.' }
       ]
     },
-    browsers: ['PhantomJS', 'Chrome'],
-    singleRun: true,
+    browsers: ['PhantomJS'],
+    singleRun: false,
     plugins: base.plugins.concat([
       'karma-coverage',
-      'karma-phantomjs-launcher',
-      'karma-chrome-launcher'
+      'karma-phantomjs-launcher'
     ])
   })
 

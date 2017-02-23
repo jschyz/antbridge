@@ -3,8 +3,9 @@
   "scripts": {
     "start": "http-server ./ -p 8081",
     "build": "node build/build.js",
-    "lint": "eslint src build",
+    "lint": "eslint src build test",
     "test": "karma start",
+    "test:unit": "karma start build/karma.unit.config.js",
     "test:cover": "karma start build/karma.cover.config.js"
   },
   "devDependencies": {
@@ -27,9 +28,11 @@
     "karma": "^1.5.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.1.0",
     "karma-mocha-reporter": "^2.2.2",
     "karma-phantomjs-launcher": "^1.0.2",
+    "karma-safari-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.2",
     "lodash": "^4.17.4",

@@ -1,8 +1,11 @@
 {
   "env": {
     "jasmine": true
-  }
+  },
   "plugins": ["jasmine"],
+  "globals": {
+    "Event": true
+  },
   "rules": {
     "jasmine/no-focused-tests": 2
   }
