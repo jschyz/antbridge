@@ -2348,6 +2348,10 @@ jasmine-core, jasmine-core@~2.5.2:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-2.5.2.tgz#6f61bd79061e27f43e6f9355e44b3c6cab6ff297"
 
+jasmine-promises:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/jasmine-promises/-/jasmine-promises-0.4.1.tgz#386b63e2c714d33d9b1b7adae507773366dbf0ab"
+
 jodid25519@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/jodid25519/-/jodid25519-1.0.2.tgz#06d4912255093419477d425633606e0e90782967"
