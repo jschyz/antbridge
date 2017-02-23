@@ -1,6 +1,6 @@
 # antbridge
 
-<p align="center">
+<p align="left">
   <a href="https://circleci.com/gh/jschyz/antbridge/tree/master"><img src="https://img.shields.io/circleci/project/jschyz/antbridge/master.svg" alt="Build Status"></a>
 </p>
 
