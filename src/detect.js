@@ -37,7 +37,7 @@ export const isNebula = ua.indexOf('Nebula') > -1
  */
 export const alipayVersion = (function () {
   if (isAlipay) {
-    var version = ua.match(/AlipayClient\/(.*)/)
+    const version = ua.match(/AlipayClient\/(.*)/)
     return (version && version.length) ? version[1] : ''
   }
   return ''
@@ -68,11 +68,11 @@ export const isIOS = /iphone|ipad/i.test(ua)
 // return 1代表目标比当前版本小，-1相反，相同为0
 export function compareVersion (targetVersion) {
   targetVersion = targetVersion.split('.')
-  var alipayVersion = alipayVersion.split('.')
+  let currentVersion = alipayVersion.split('.')
 
-  for (var i = 0, n1, n2; i < alipayVersion.length; i++) {
+  for (let i = 0, n1, n2; i < currentVersion.length; i++) {
     n1 = parseInt(targetVersion[i], 10) || 0
-    n2 = parseInt(alipayVersion[i], 10) || 0
+    n2 = parseInt(currentVersion[i], 10) || 0
 
     if (n1 > n2) return -1
     if (n1 < n2) return 1

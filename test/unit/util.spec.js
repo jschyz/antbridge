@@ -1,4 +1,4 @@
-import { isFunction, isString } from 'src/util'
+import { isFunction, isString, isNumber } from 'src/util'
 
 describe('Util', () => {
   it('is Function', () => {
@@ -11,5 +11,11 @@ describe('Util', () => {
     expect(true).toBe(isString(''))
     expect(true).toBe(isString(``))
     expect(false).toBe(isString(null))
+  })
+
+  it('is Number', () => {
+    expect(true).toBe(isNumber(0))
+    expect(true).toBe(isNumber(0e0))
+    expect(true).toBe(isNumber(Infinity))
   })
 })

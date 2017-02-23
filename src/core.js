@@ -22,14 +22,16 @@ export function ready () {
  * 无需考虑接口的执行上下文，必定调用成功
  */
 export function call () {
-  var args = Array.from(arguments)
+  var args = [].slice.call(arguments)
 
   var name = args[0]
   var opt = args[1] || {}
 
   if (!isString(name)) {
-    console.error('apiName error：', name)
-    return
+    return Promise.reject({
+      error: 1,
+      errorMessage: '接口不存在'
+    })
   }
 
   return readyPromise.then(() => new Promise((resolve, reject) => {

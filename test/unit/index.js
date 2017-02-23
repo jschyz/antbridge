@@ -1,4 +1,5 @@
 require('es6-promise/auto')
+require('jasmine-promises')
 
 // import all helpers
 const helpersContext = require.context('../helpers', true)
