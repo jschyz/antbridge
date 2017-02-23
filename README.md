@@ -2,6 +2,7 @@
 
 <p align="left">
   <a href="https://circleci.com/gh/jschyz/antbridge/tree/master"><img src="https://img.shields.io/circleci/project/jschyz/antbridge/master.svg" alt="Build Status"></a>
+  <a href="https://codecov.io/github/jschyz/antbridge?branch=master"><img src="https://img.shields.io/codecov/c/github/jschyz/antbridge/master.svg" alt="Coverage Status"></a>
 </p>
 
 - 解决调用时序，优化任务队列
