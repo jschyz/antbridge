@@ -10,13 +10,14 @@ module.exports = function(config) {
         { type: 'text-summary', subdir: '.' }
       ]
     },
-    browsers: ['PhantomJS'],
+    browsers: ['PhantomJS', 'Chrome'],
     singleRun: true,
     plugins: base.plugins.concat([
       'karma-coverage',
-      'karma-phantomjs-launcher'
+      'karma-phantomjs-launcher',
+      'karma-chrome-launcher'
     ])
   })
-  
+
   config.set(options)
 }

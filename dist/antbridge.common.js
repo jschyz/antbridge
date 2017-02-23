@@ -155,7 +155,7 @@ function call () {
   }); })
 }
 
-var _events = {};
+var _listener = {};
 /**
  * 绑定全局事件
  * @param {string} event 事件名称，多个事件可用空格分隔开
@@ -164,8 +164,8 @@ var _events = {};
  */
 function on (event, fn) {
   event.split(/\s+/g).forEach(function (eventName) {
-    _events[eventName] || (_events[eventName] = []);
-    _events[eventName].push(fn);
+    _listener[eventName] || (_listener[eventName] = []);
+    _listener[eventName].push(fn);
     document.addEventListener(eventName, fn, false);
   });
 }
@@ -177,9 +177,9 @@ function on (event, fn) {
  */
 function off (evt) {
   var fn;
-  _events[evt] || (_events[evt] = []);
+  _listener[evt] || (_listener[evt] = []);
 
-  while ((fn = _events[evt].shift()) !== undefined) {
+  while ((fn = _listener[evt].shift()) !== undefined) {
     document.removeEventListener(evt, fn, false);
   }
 }
@@ -188,7 +188,7 @@ function off (evt) {
 var core = Object.freeze({
 	ready: ready,
 	call: call,
-	_events: _events,
+	_listener: _listener,
 	on: on,
 	off: off
 });
