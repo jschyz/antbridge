@@ -1,6 +1,5 @@
 set -e
 npm run lint
-npm run test:unit
 npm run test:cover
 
 # report coverage stats for non-PRs
