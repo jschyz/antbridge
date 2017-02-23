@@ -1,5 +1,9 @@
 # antbridge
 
+<p align="center">
+  <a href="https://circleci.com/gh/jschyz/antbridge/tree/master"><img src="https://img.shields.io/circleci/project/jschyz/antbridge/master.svg" alt="Build Status"></a>
+</p>
+
 - 解决调用时序，优化任务队列
 - 统一使用异步调用的方式
 - 对一些有可能超时 api (network\geolocation) 使用 Promise.race 来处理超时方案
