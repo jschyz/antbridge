@@ -3,9 +3,7 @@
 [![Build Status](https://img.shields.io/circleci/project/jschyz/antbridge/master.svg)](https://circleci.com/gh/jschyz/antbridge/tree/master)
 [![Coverage Status](https://img.shields.io/codecov/c/github/jschyz/antbridge/master.svg)](https://codecov.io/github/jschyz/antbridge?branch=master)
 
-> 此项目只是本人对 Promises/A+规范 实践
-由于我司 native 跟 webview 通信这块正在重构，采用回调方式会引发顺序性、捕获异常难等问题
-遂将 AlipayJSBridge 进行 promise 重构试水，然后对公司 jsbridge 进行平缓迁移。
+> 此项目只是本人对 Promises/A+规范 实践，由于我司 native 跟 webview 通信这块正在重构，采用回调方式会引发顺序性、捕获异常难等问题。遂将 AlipayJSBridge 进行 promise 重构试水，然后对公司 jsbridge 进行平缓迁移。
 
 解决的问题：
 
@@ -37,7 +35,7 @@ const readyPromise = new Promise(resolve => {
 
 方案使用: karma + jasmine + phantomjs 全家桶对方式进行 Unit Test
 
-由于 `jasmine` 断言环境，不是标准的 Nebula 容器。故测试时不会自动注入 AlipayJSBridge 对象，从而触发 AlipayJSBridgeReady 事件（细节是在 DOMContentLoaded 之后触发）。
+由于 `jasmine` 断言环境，不是标准的 Nebula 容器。故测试时不会自动注入 AlipayJSBridge 对象，从而触发 AlipayJSBridgeReady 回调（细节是在 DOMContentLoaded 之后触发）。
 
 那么在运行 Spec 时，我们可以利用 DOM Event(自定义事件) 来初始化
 
@@ -49,3 +47,5 @@ beforeEach(() => {
 ```
 
 ### todo
+
+- ios delay导致的hideLoading不一定能成功阻止被delay的showLoading的bug
