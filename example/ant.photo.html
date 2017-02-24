@@ -1,0 +1,25 @@
+<h1>点击查看选择一幅图片</h1>
+
+<a href="#" class="btn btn-default read">调用图片选择</a>
+<img id="myImage" />
+
+<script src="../dist/antbridge.min.js"></script>
+<script>
+document.querySelector('.read').addEventListener('click', function() {
+  ant.photo({
+    dataType: 'dataURL',
+    imageFormat: 'jpg',
+    quality: 75,
+    maxWidth: 500,
+    maxHeight: 500,
+    allowEdit: true,
+    multimediaConfig: { // 可选，仅当该项被配置时，图片被传输至 APMultimedia
+      compress: 2, // 可选，默认为4。 0-低质量，1-中质量，2-高质量，3-不压缩，4-根据网络情况自动选择
+      business: "multiMedia" // 可选，默认为“NebulaBiz”
+    }
+  }).then(function (result) {
+    var image = document.getElementById('myImage');
+    image.src = result.dataURL;
+  });
+});
+</script>

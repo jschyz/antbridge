@@ -1,5 +1,5 @@
 {
-  "version": "1.1.4-rc",
+  "version": "1.1.4",
   "scripts": {
     "start": "http-server ./ -p 8081",
     "build": "node build/build.js",
