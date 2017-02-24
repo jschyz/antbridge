@@ -13,15 +13,32 @@
 - 编写多任务流时，代码清晰更可控
 
 ### 使用
-```
+
+api 范式跟 支付宝JSAPI 保持一致
+所以代码迁移方面只需要关注 Promise/then 范式即可
+
+```javascript
 ant.call('api', opts).then(result => console.log(result))
+```
+
+比如复杂场景:
+需要获取地理位置来进行数据不同的展示
+
+```javascript
+ant.geolocation.getCurrentPosition()
+.then(function(result) {
+  // 正确返回
+  // some code: ajax
+}, function(result) {
+  // 调用超时
+})
 ```
 
 ### 实现核心
 
 利用 Promise 保证每次调用都是已异步方式进行，让开发者不必关心 `AlipayJSBridge` 注入时机问题，也不需要关心任务被漏掉等情况
 
-```
+``` javascript
 const readyPromise = new Promise(resolve => {
   if (window.AlipayJSBridge && window.AlipayJSBridge.call) {
     resolve()
@@ -49,3 +66,4 @@ beforeEach(() => {
 ### todo
 
 - ios delay导致的hideLoading不一定能成功阻止被delay的showLoading的bug
+- 代码单测覆盖率达到 100%
