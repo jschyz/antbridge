@@ -1,9 +1,13 @@
 # antbridge
 
-<p align="left">
-  <a href="https://circleci.com/gh/jschyz/antbridge/tree/master"><img src="https://img.shields.io/circleci/project/jschyz/antbridge/master.svg" alt="Build Status"></a>
-  <a href="https://codecov.io/github/jschyz/antbridge?branch=master"><img src="https://img.shields.io/codecov/c/github/jschyz/antbridge/master.svg" alt="Coverage Status"></a>
-</p>
+[![Build Status](https://img.shields.io/circleci/project/jschyz/antbridge/master.svg)](https://circleci.com/gh/jschyz/antbridge/tree/master)
+[![Coverage Status](https://img.shields.io/codecov/c/github/jschyz/antbridge/master.svg)](https://codecov.io/github/jschyz/antbridge?branch=master)
+
+> 此项目只是本人对 Promises/A+规范 实践
+由于我司 native 跟 webview 通信这块正在重构，采用回调方式会引发顺序性、捕获异常难等问题
+遂将 AlipayJSBridge 进行 promise 重构试水，然后对公司 jsbridge 进行平缓迁移。
+
+解决的问题：
 
 - 解决调用时序，优化任务队列
 - 统一使用异步调用的方式
