@@ -14,8 +14,7 @@
 
 ### 使用
 
-api 范式跟 支付宝JSAPI 保持一致
-所以代码迁移方面只需要关注 Promise/then 范式即可
+api 范式跟 支付宝JSAPI 保持一致，所以代码迁移方面只需要关注 Promise/then 范式即可
 
 ```javascript
 ant.call('api', opts).then(result => console.log(result))
@@ -65,5 +64,9 @@ beforeEach(() => {
 
 ### todo
 
+- 单测覆盖率达到 100%
+- antLog 实现
 - ios delay导致的hideLoading不一定能成功阻止被delay的showLoading的bug
-- 代码单测覆盖率达到 100%
+
+
+你的 issue 跟 star 是我完善前进的动力 (๑´ڡ`๑)
