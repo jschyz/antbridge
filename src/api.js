@@ -739,3 +739,16 @@ export function showLoading (opt) {
 export function hideLoading (fn) {
   return call('hideLoading')
 }
+
+/**
+ * @name debugEnabled
+ * @DESCRIPTION 开启aliBridge的debug模式,调用jsapi时会在控制台打印日志
+ */
+// export function debugEnabled (opt) {
+//     Ali.debug = (opt === true) ? 2 : 1;
+// };
+
+export var launchParams
+export function getLaunchParams (fn) {
+  return ready().then(() => (launchParams = window.AlipayJSBridge.startupParams))
+}
