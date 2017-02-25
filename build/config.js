@@ -1,5 +1,4 @@
 const path = require('path')
-const flow = require('rollup-plugin-flow-no-whitespace')
 const buble = require('rollup-plugin-buble')
 const replace = require('rollup-plugin-replace')
 const alias = require('rollup-plugin-alias')
@@ -49,7 +48,6 @@ function genConfig (opts) {
       replace({
         __VERSION__: version
       }),
-      flow(),
       buble(),
       alias(Object.assign({}, require('./alias'), opts.alias))
     ].concat(opts.plugins || [])

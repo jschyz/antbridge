@@ -645,7 +645,7 @@ babel-types@^6.15.0, babel-types@^6.18.0, babel-types@^6.19.0, babel-types@^6.22
     lodash "^4.2.0"
     to-fast-properties "^1.0.1"
 
-babylon@^6.11.0, babylon@^6.13.0, babylon@^6.15.0, babylon@^6.8.4:
+babylon@^6.11.0, babylon@^6.13.0, babylon@^6.15.0:
   version "6.16.0"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.16.0.tgz#fed89928e23b06e8e3c32f7546365a03dd1d3824"
 
@@ -1754,13 +1754,6 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-remove-types-no-whitespace@^1.0.3:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/flow-remove-types-no-whitespace/-/flow-remove-types-no-whitespace-1.0.5.tgz#3d297985a0bed5197b8fb0cbe89ec163f8dea9eb"
-  dependencies:
-    babylon "^6.8.4"
-    magic-string "^0.16.0"
-
 for-in@^0.1.5:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-0.1.6.tgz#c9f96e89bfad18a545af5ec3ed352a1d9e5b4dc8"
@@ -2645,12 +2638,6 @@ magic-string@^0.15.2:
   dependencies:
     vlq "^0.2.1"
 
-magic-string@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.16.0.tgz#970ebb0da7193301285fb1aa650f39bdd81eb45a"
-  dependencies:
-    vlq "^0.2.1"
-
 map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
@@ -3494,13 +3481,6 @@ rollup-plugin-buble@^0.15.0:
     buble "^0.15.0"
     rollup-pluginutils "^1.5.0"
 
-rollup-plugin-flow-no-whitespace@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-flow-no-whitespace/-/rollup-plugin-flow-no-whitespace-1.0.0.tgz#bd4ba1bcd99ad5b88234d72e6e2dacea9aa02d16"
-  dependencies:
-    flow-remove-types-no-whitespace "^1.0.3"
-    rollup-pluginutils "^1.5.2"
-
 rollup-plugin-replace@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/rollup-plugin-replace/-/rollup-plugin-replace-1.1.1.tgz#396315ded050a6ce43b9518a886a3f60efb1ea33"
@@ -3509,7 +3489,7 @@ rollup-plugin-replace@^1.1.1:
     minimatch "^3.0.2"
     rollup-pluginutils "^1.5.0"
 
-rollup-pluginutils@^1.5.0, rollup-pluginutils@^1.5.2:
+rollup-pluginutils@^1.5.0:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/rollup-pluginutils/-/rollup-pluginutils-1.5.2.tgz#1e156e778f94b7255bfa1b3d0178be8f5c552408"
   dependencies:
