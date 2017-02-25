@@ -1,5 +1,5 @@
 /*!
- * antbridge.js v1.1.4-rc
+ * antbridge.js v1.1.4
  * (c) 2017-2017 huihui
  * Released under the MIT License.
  */
@@ -17,7 +17,7 @@ var ant$1 = Object.create({});
 var ua = navigator.userAgent;
 
 // antBridge版本号
-var version = '1.1.4-rc';
+var version = '1.1.4';
 
 /**
  * @name isAlipay
@@ -77,11 +77,11 @@ var isIOS = /iphone|ipad/i.test(ua);
 // return 1代表目标比当前版本小，-1相反，相同为0
 function compareVersion (targetVersion) {
   targetVersion = targetVersion.split('.');
-  var alipayVersion = alipayVersion.split('.');
+  var currentVersion = alipayVersion.split('.');
 
-  for (var i = 0, n1, n2; i < alipayVersion.length; i++) {
+  for (var i = 0, n1 = (void 0), n2 = (void 0); i < currentVersion.length; i++) {
     n1 = parseInt(targetVersion[i], 10) || 0;
-    n2 = parseInt(alipayVersion[i], 10) || 0;
+    n2 = parseInt(currentVersion[i], 10) || 0;
 
     if (n1 > n2) { return -1 }
     if (n1 < n2) { return 1 }
@@ -116,6 +116,13 @@ function isNumber (obj) {
   return toString.call(obj) === '[object Number]'
 }
 
+function extend (to, _from) {
+  for (var key in _from) {
+    to[key] = _from[key];
+  }
+  return to
+}
+
 /* @Promise the core unit */
 /**
  * 解决调用时序，优化任务队列
@@ -138,14 +145,16 @@ function ready () {
  * 无需考虑接口的执行上下文，必定调用成功
  */
 function call () {
-  var args = Array.from(arguments);
+  var args = [].slice.call(arguments);
 
   var name = args[0];
   var opt = args[1] || {};
 
   if (!isString(name)) {
-    console.error('apiName error：', name);
-    return
+    return Promise.reject({
+      error: 1,
+      errorMessage: '接口不存在'
+    })
   }
 
   return readyPromise.then(function () { return new Promise(function (resolve, reject) {
@@ -350,7 +359,7 @@ function photo (opt) {
     maskHeight: undefined
   };
 
-  Object.assign(def, opt);
+  extend(def, opt);
 
   def.imageFormat = def.format;
 
@@ -859,7 +868,7 @@ function setTitle (opt) {
 
   opt.title = opt.title || opt.text;
 
-  Object.assign(def, opt);
+  extend(def, opt);
 
   if (def.title === null) {
     console.error('setTitle: title is required！');
@@ -931,6 +940,19 @@ function hideLoading (fn) {
   return call('hideLoading')
 }
 
+/**
+ * @name debugEnabled
+ * @DESCRIPTION 开启aliBridge的debug模式,调用jsapi时会在控制台打印日志
+ */
+// export function debugEnabled (opt) {
+//     Ali.debug = (opt === true) ? 2 : 1;
+// };
+
+var launchParams;
+function getLaunchParams (fn) {
+  return ready().then(function () { return (launchParams = window.AlipayJSBridge.startupParams); })
+}
+
 
 var api = Object.freeze({
 	pushWindow: pushWindow,
@@ -956,12 +978,14 @@ var api = Object.freeze({
 	showTitle: showTitle,
 	hideTitle: hideTitle,
 	showLoading: showLoading,
-	hideLoading: hideLoading
+	hideLoading: hideLoading,
+	get launchParams () { return launchParams; },
+	getLaunchParams: getLaunchParams
 });
 
-Object.assign(ant$1, detect);
-Object.assign(ant$1, core);
-Object.assign(ant$1, api);
+extend(ant$1, detect);
+extend(ant$1, core);
+extend(ant$1, api);
 
 ['startApp', 'showOptionMenu', 'hideOptionMenu', 'showToolbar', 'hideToolbar', 'closeWebview', 'sendSMS', 'scan', 'getSessionData', 'setSessionData', 'checkJSAPI', 'checkApp', 'isInstalledApp', 'deposit', 'chooseContact', 'alipayContact', 'getConfig', 'getCities', 'rsa', 'getWifiList', 'connectWifi', 'notifyWifiShared', 'thirdPartyAuth', 'getThirdPartyAuthcode', 'setToolbarMenu', 'exitApp', 'hideBackButton', 'startApp', 'startPackage', 'getSharedData', 'setSharedData', 'removeSharedData', 'setClipboard', 'startDownload', 'stopDownload', 'getDownloadInfo', 'detectBeacons', 'startBeaconsBeep', 'stopBeaconsBeep', 'startIndoorLocation', 'stopIndoorLocation', 'addEventCal', 'startSpeech', 'stopSpeech', 'cancelSpeech', 'getWifiInfo', 'clearAllCookie', 'getMtopToken', 'getClientInfo', 'sinasso', 'getClipboard', 'checkBLEAvalability', 'scanBeacons', 'isSpeechAvailable', 'speechRecognizer', 'contactSync', 'setGestureBack', 'remoteLog', 'httpRequest', 'rpc', 'ping', 'snapshot', 'imageViewer', 'upload', 'networkAnalysis', 'showTitleLoading', 'hideTitleLoading', 'getLocation'].forEach(function (methodName) {
   ant$1[methodName] = function () {
