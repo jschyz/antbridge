@@ -20,7 +20,7 @@ describe('Util', () => {
   })
 
   it('extend:Object.assign', () => {
-    expect({o:'object'}).toEqual(extend({}, {o:'object'}))
-    expect({o:'object'}).toEqual(extend({}, Object.freeze({o:'object'})))
+    expect({o: 'object'}).toEqual(extend({}, {o: 'object'}))
+    expect({o: 'object'}).toEqual(extend({}, Object.freeze({o: 'object'})))
   })
 })
