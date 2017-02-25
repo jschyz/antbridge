@@ -1,5 +1,5 @@
 import { ready, call } from './core'
-import { isString, isNumber } from './util'
+import { isString, isNumber, extend } from './util'
 import { isAndroid } from './detect'
 
 /**
@@ -159,7 +159,7 @@ export function photo (opt) {
     maskHeight: undefined
   }
 
-  Object.assign(def, opt)
+  extend(def, opt)
 
   def.imageFormat = def.format
 
@@ -668,7 +668,7 @@ export function setTitle (opt) {
 
   opt.title = opt.title || opt.text
 
-  Object.assign(def, opt)
+  extend(def, opt)
 
   if (def.title === null) {
     console.error('setTitle: title is required！')
