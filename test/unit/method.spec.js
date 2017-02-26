@@ -1,4 +1,4 @@
-import { ready, call, on, off } from 'src/core'
+import { ready, call, on, off } from 'src/method'
 
 describe('Core unit test', () => {
   // 利用 Event 触发 AlipayJSBridgeReady 回调

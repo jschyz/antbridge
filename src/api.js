@@ -1,4 +1,4 @@
-import { ready, call } from './core'
+import { ready, call } from './method'
 import { isString, isNumber, extend } from './util'
 import { isAndroid } from './detect'
 
