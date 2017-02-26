@@ -64,7 +64,6 @@ beforeEach(() => {
 
 ### todo
 
-- 单测覆盖率达到 100%
 - antLog 实现
 - ios delay导致的hideLoading不一定能成功阻止被delay的showLoading的bug
 
