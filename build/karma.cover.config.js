@@ -9,16 +9,25 @@ module.exports = function(config) {
         { type: 'text-summary', dir: '../coverage', subdir: '.' }
       ]
     },
-    browsers: ['PhantomJS'],
-    singleRun: true,
+    browsers: ['PhantomJS', 'Chrome'],
+    singleRun: false,
     plugins: base.plugins.concat([
       'karma-coverage',
-      'karma-phantomjs-launcher'
+      'karma-phantomjs-launcher',
+      'karma-chrome-launcher'
     ])
   })
 
   options.webpack.module.rules[0].options = {
-    plugins: ['istanbul']
+    plugins: [
+      [
+        'istanbul', {
+          exclude: [
+            'src/core.js'
+          ]
+        }
+      ]
+    ]
   }
 
   config.set(options)
