@@ -1,7 +1,6 @@
 // Karma configuration
 // Generated on Wed Feb 22 2017 19:06:15 GMT+0800 (CST)
 var alias = require('./alias')
-var webpack = require('webpack')
 var webpackConfig = {
   resolve: {
     alias: alias

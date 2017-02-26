@@ -1,6 +1,6 @@
 var base = require('./karma.base.config')
 
-module.exports = function(config) {
+module.exports = function (config) {
   var options = Object.assign(base, {
     reporters: ['mocha', 'coverage'],
     coverageReporter: {
