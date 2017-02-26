@@ -127,7 +127,6 @@ function extend (to, _from) {
   return to
 }
 
-/* @Promise the core unit */
 /**
  * 解决调用时序，优化任务队列
  * 统一使用异步调用的方式
@@ -140,6 +139,7 @@ var readyPromise = new Promise(function (resolve) {
   }
 });
 
+/* @Promise the core unit */
 function ready () {
   return readyPromise
 }
@@ -198,7 +198,7 @@ function off (evt) {
 }
 
 
-var core = Object.freeze({
+var method = Object.freeze({
 	ready: ready,
 	call: call,
 	_listener: _listener,
@@ -988,7 +988,7 @@ var api = Object.freeze({
 });
 
 extend(ant$1, detect);
-extend(ant$1, core);
+extend(ant$1, method);
 extend(ant$1, api);
 
 ['startApp', 'showOptionMenu', 'hideOptionMenu', 'showToolbar', 'hideToolbar', 'closeWebview', 'sendSMS', 'scan', 'getSessionData', 'setSessionData', 'checkJSAPI', 'checkApp', 'isInstalledApp', 'deposit', 'chooseContact', 'alipayContact', 'getConfig', 'getCities', 'rsa', 'getWifiList', 'connectWifi', 'notifyWifiShared', 'thirdPartyAuth', 'getThirdPartyAuthcode', 'setToolbarMenu', 'exitApp', 'hideBackButton', 'startApp', 'startPackage', 'getSharedData', 'setSharedData', 'removeSharedData', 'setClipboard', 'startDownload', 'stopDownload', 'getDownloadInfo', 'detectBeacons', 'startBeaconsBeep', 'stopBeaconsBeep', 'startIndoorLocation', 'stopIndoorLocation', 'addEventCal', 'startSpeech', 'stopSpeech', 'cancelSpeech', 'getWifiInfo', 'clearAllCookie', 'getMtopToken', 'getClientInfo', 'sinasso', 'getClipboard', 'checkBLEAvalability', 'scanBeacons', 'isSpeechAvailable', 'speechRecognizer', 'contactSync', 'setGestureBack', 'remoteLog', 'httpRequest', 'rpc', 'ping', 'snapshot', 'imageViewer', 'upload', 'networkAnalysis', 'showTitleLoading', 'hideTitleLoading', 'getLocation'].forEach(function (methodName) {
