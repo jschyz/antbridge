@@ -1,6 +1,6 @@
 import { isFunction, isString, isNumber, extend } from 'src/util'
 
-describe('Util', () => {
+describe('Util unit test', () => {
   it('Should be a Function', () => {
     expect(true).toBe(isFunction(function () {}))
     expect(true).toBe(isFunction(() => {}))

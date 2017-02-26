@@ -72,9 +72,7 @@ describe('Core unit test', () => {
   // 单测：事件绑定 on off 实现
   describe('The event binding: on & off', () => {
     it('The binding event:using on', () => {
-      on('titleClick', () => {
-        console.log('title clicked')
-      })
+      on('titleClick', () => {})
     })
 
     it('Remove event:using off', () => {
