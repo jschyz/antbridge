@@ -71,13 +71,13 @@ describe('Core unit test', () => {
 
   // 单测：事件绑定 on off 实现
   describe('The event binding: on & off', () => {
-    it('should be  mock the built-in parameters', () => {
+    it('The binding event:using on', () => {
       on('titleClick', () => {
         console.log('title clicked')
       })
     })
 
-    it('should be  mock the built-in parameters', () => {
+    it('Remove event:using off', () => {
       off('titleClick')
       off('subtitleClick')
     })
